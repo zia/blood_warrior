@@ -11,7 +11,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link href ="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" rel="stylesheet">
     <style {csp-style-nonce}>
-
+        .custom-footer {
+            position: fixed;
+            /* color: white; */
+            height: 30px;
+            bottom: 0;
+            /* left: 0; */
+            width: 100%;
+            /* background-color: #FF0000; */
+        }
     </style>
 </head>
 <body style="background-color:#e9f6fc;">
@@ -47,7 +55,7 @@
         </div>
 
 
-        <!-- result -->
+        <!-- Result -->
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
@@ -87,6 +95,15 @@
                 <div class="text-end">
                     <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#alarmModal">জরুরী রক্ত প্রয়োজন?<br>একটি এলার্ম তৈরি করুন</button>
                 </div>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="row custom-footer">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10 bg-info text-center">
+                <a href="https://github.com/rubina2000" target="_blank" class="text-white">&copy; <?= date('Y') ?>; Khadija Akter Rubina</a>
             </div>
             <div class="col-sm-1"></div>
         </div>
