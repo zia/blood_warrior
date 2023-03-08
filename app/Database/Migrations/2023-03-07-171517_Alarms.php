@@ -18,6 +18,7 @@ class Alarms extends Migration
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '50',
+                'null' => true,
             ],
             'mobile' => [
                 'type'       => 'VARCHAR',

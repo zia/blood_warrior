@@ -26,6 +26,7 @@ class Donors extends Migration
             'email' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '50',
+                'null' => true,
             ],
             'district' => [
                 'type'       => 'VARCHAR',
@@ -34,6 +35,10 @@ class Donors extends Migration
             'blood_group' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '4',
+            ],
+            'address' => [
+                'type' => 'TEXT',
+                'null' => true,
             ],
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp',

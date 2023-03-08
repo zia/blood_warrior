@@ -23,19 +23,19 @@
     </style>
 </head>
 <body style="background-color:#e9f6fc;">
-    <br>
+<br>
     <div class="container-fluid">
         <!-- Heading -->
         <div class="row">
             <div class="col-sm-10">
                 <h1 class="display-1 text-danger">
-                    <img src="/blood-drop-icon.png" style="width:80px;height:80px;" class="img-fluid" alt="">
-                    <b style="text-shadow: 2px 2px #FF0000;">Blood Warrior</b>
+                    <a href="<?=base_url()?>"><img src="/blood-drop-icon.png" style="width:80px;height:80px;" class="img-fluid" alt=""></a>
+                    <a href="<?=base_url()?>" style="text-decoration: none; color: #FF0000"><b style="text-shadow: 2px 2px #FF0000;">Blood Warrior</b></a>
                     <kbd style="font-size: 16px;" class="text-white">রক্ত দিন জীবন বাঁচান</kbd>
                 </h1>
             </div>
             <div class="col-sm-2">
-                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#regModal">রক্তযোদ্ধা?<br>সাইন আপ করুন।</button>
+                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#regModal">রক্তযোদ্ধা?<br>নিবন্ধন করুন।</button>
             </div>
         </div>
 
@@ -44,9 +44,13 @@
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <form>
+                <?php
+                    // echo validation_list_errors();
+                    $attributes = ['method' => 'get', 'id' => 'srch'];
+                    echo form_open('home/search', $attributes);
+                ?>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control form-control-lg" placeholder="Find Blood Donors by District, Phone, Email or Blood Group.">
+                        <input type="text" name="search" id="search" value="<?=isset($_GET['search']) ? esc($_GET['search']) : '';?>" class="form-control form-control-lg" placeholder="জেলা, ফোন, ইমেইল অথবা রক্তের গ্রুপ দ্বারা রক্তদাতা খুঁজুন..." required>
                         <button class="btn btn-outline-success" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
                 </form>
@@ -72,32 +76,86 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td class="text-center">Anna</td>
-                                <td class="text-center">Pitt</td>
-                                <td class="text-center">35</td>
-                                <td class="text-center">New York</td>
-                                <td class="text-center">USA</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td class="text-center">Anna</td>
-                                <td class="text-center">Pitt</td>
-                                <td class="text-center">35</td>
-                                <td class="text-center">New York</td>
-                                <td class="text-center">USA</td>
-                            </tr>
+                            <?php
+                                if(!empty($donors))
+                                {
+                                    foreach ($donors as $donor)
+                                    {
+                            ?>
+
+                                    <tr>
+                                        <td class="text-center"><?=$donor['id']?></td>
+                                        <td class="text-center"><?=$donor['name']?></td>
+                                        <td class="text-center"><?=$donor['mobile']?></td>
+                                        <td class="text-center"><?=$donor['email']?></td>
+                                        <td class="text-center"><?=$donor['district']?></td>
+                                        <td class="text-center"><?=$donor['blood_group']?></td>
+                                    </tr>
+                                    <?php
+
+                                    } //foreach ends;
+                                } //if ends;
+                                else if (!empty($supporters))
+                                {
+                                    foreach ($supporters as $supporter)
+                                    { ?>
+                                        <tr>
+                                        <td class="text-center"><?=$supporter['id']?></td>
+                                        <td class="text-center"><?=$supporter['name']?></td>
+                                        <td class="text-center"><?=$supporter['mobile']?></td>
+                                        <td class="text-center"><?=$supporter['email']?></td>
+                                        <td class="text-center"><?=$supporter['district']?></td>
+                                        <td class="text-center"><?=$supporter['blood_group']?></td>
+                                        </tr>
+                                    <?php
+                                    }
+                                }
+
+                                else
+                                {?>
+
+                                        <tr>
+                                            <td class="text-center">কোন রক্তদাতা পাওয়া যায়নি! জরুরী প্রয়োজনে একটি এলার্ম তৈরি করুন।</td>
+                                            <!-- <td class="text-center"></td> -->
+                                            <!-- <td class="text-center"></td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center"></td> -->
+                                        </tr>
+
+                                <?php }
+                            ?>
                         </tbody>
                     </table>
                 </div>
                 <div class="text-end">
                     <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#alarmModal">জরুরী রক্ত প্রয়োজন?<br>একটি এলার্ম তৈরি করুন</button>
                 </div>
+                <?= validation_list_errors();?>
             </div>
             <div class="col-sm-1"></div>
         </div>
-
+        <br>
+        <!-- Alarms -->
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <?php foreach($alarms as $alarm) {?>
+                <div class="col-sm-2">
+                <div class="card bg-danger text-white">
+                    <div class="card-header"><i class="fa fa-bullhorn fa-2xs" aria-hidden="true"></i> জরুরী রক্ত প্রয়োজন</div>
+                    <div class="card-body">
+                        <p>রক্তের গ্রুপঃ <?=$alarm['blood_group']?></p>
+                        <p>জেলাঃ <?=$alarm['district']?></p>
+                        <p>ঠিকানাঃ <?=$alarm['address']?></p>
+                        <p>উদ্দেশ্যঃ <?=$alarm['reason']?></p>
+                    </div>
+                    <div class="card-footer"><a href="tel:<?=$alarm['mobile']?>" class="btn btn-outline-warning text-white"><i class="fa fa-phone" aria-hidden="true"></i> <?=$alarm['mobile']?></a></div>
+                </div>
+            </div>
+            <?php } ?>
+            <div class="col-sm-1"></div>
+        </div>
+        <br/><br/>
         <!-- Footer -->
         <div class="row custom-footer">
             <div class="col-sm-1"></div>
@@ -120,7 +178,11 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <!-- Registration form -->
-                        <form action="">
+                        <?php
+                            $attributes = ['id' => 'reg'];
+                            echo form_open('home/register', $attributes);
+                            echo csrf_field();
+                        ?>
                             <div class="mb-3 mt-3">
                                 <label for="nam" class="text-danger">নাম:</label>
                                 <input type="text" class="form-control" id="nam" placeholder="আপনার পূর্ণনাম লিখুন (আবশ্যক)" name="nam" required>
@@ -213,15 +275,15 @@
                                 <label for="blood_group" class="form-label text-danger">রক্তের গ্রুপ: (যেকোন একটি নির্বাচন করুন):</label>
                                 <select class="form-select" id="blood_group" name="blood_group" required>
                                     <option selected disabled value="">নির্বাচন করুন (আবশ্যক)</option>
-                                    <option>A+(এ পজেটিভ)</option>
-                                    <option>A-(এ নেগেটিভ)</option>
-                                    <option>B+(বি পজেটিভ)</option>
-                                    <option>B-(বি নেগেটিভ)</option>
-                                    <option>O+(ও পজেটিভ)</option>
-                                    <option>O-(ও নেগেটিভ)</option>
-                                    <option>AB+(এবি পজেটিভ)</option>
-                                    <option>AB-(এবি নেগেটিভ)</option>
-                                    <option>Others(অন্যান্য)</option>
+                                    <option value="A+">A+(এ পজেটিভ)</option>
+                                    <option value="A-">A-(এ নেগেটিভ)</option>
+                                    <option value="B+">B+(বি পজেটিভ)</option>
+                                    <option value="B-">B-(বি নেগেটিভ)</option>
+                                    <option value="O+">O+(ও পজেটিভ)</option>
+                                    <option value="O-">O-(ও নেগেটিভ)</option>
+                                    <option value="AB+">AB+(এবি পজেটিভ)</option>
+                                    <option value="AB-">AB-(এবি নেগেটিভ)</option>
+                                    <option value="etc">Others(অন্যান্য)</option>
                                 </select>
                             </div>
 
@@ -255,7 +317,12 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <!-- Alarm form -->
-                        <form action="">
+                        <?php
+                            $attributes = ['id' => 'alrm'];
+                            echo form_open('home/alarm', $attributes);
+                            echo csrf_field();
+                        ?>
+                        <!-- <form action=""> -->
                             <div class="mb-3 mt-3">
                                 <label for="nam">নাম:</label>
                                 <input type="text" class="form-control" id="nam2" placeholder="আপনার পূর্ণনাম লিখুন" name="nam2">
@@ -343,15 +410,15 @@
                                 <label for="blood_group" class="form-label text-danger">রক্তের গ্রুপ: (যেকোন একটি নির্বাচন করুন):</label>
                                 <select class="form-select" id="blood_group2" name="blood_group2" required>
                                     <option selected disabled value="">নির্বাচন করুন (আবশ্যক)</option>
-                                    <option>A+(এ পজেটিভ)</option>
-                                    <option>A-(এ নেগেটিভ)</option>
-                                    <option>B+(বি পজেটিভ)</option>
-                                    <option>B-(বি নেগেটিভ)</option>
-                                    <option>O+(ও পজেটিভ)</option>
-                                    <option>O-(ও নেগেটিভ)</option>
-                                    <option>AB+(এবি পজেটিভ)</option>
-                                    <option>AB-(এবি নেগেটিভ)</option>
-                                    <option>Others(অন্যান্য)</option>
+                                    <option value="A+">A+(এ পজেটিভ)</option>
+                                    <option value="A-">A-(এ নেগেটিভ)</option>
+                                    <option value="B+">B+(বি পজেটিভ)</option>
+                                    <option value="B-">B-(বি নেগেটিভ)</option>
+                                    <option value="O+">O+(ও পজেটিভ)</option>
+                                    <option value="O-">O-(ও নেগেটিভ)</option>
+                                    <option value="AB+">AB+(এবি পজেটিভ)</option>
+                                    <option value="AB-">AB-(এবি নেগেটিভ)</option>
+                                    <option value="etc">Others(অন্যান্য)</option>
                                 </select>
                             </div>
 
