@@ -20,6 +20,34 @@
             width: 100%;
             /* background-color: #FF0000; */
         }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #e6e6e6;
+            float: right;
+        }
+        li {
+            float: right;
+        }
+
+        li a {
+            display: block;
+            color: #0066cc;
+            text-align: center;
+            padding: 10px 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            background-color: #f2f2f2;
+        }
+
+        .active {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body style="background-color:#e9f6fc;">
@@ -67,7 +95,7 @@
                     <table class="table table-bordered">
                         <thead class="table-success">
                             <tr>
-                                <th class="text-center">ক্রম</th>
+                                <th class="text-center">আইডি</th>
                                 <th class="text-center">নাম</th>
                                 <th class="text-center">মোবাইল</th>
                                 <th class="text-center">ইমেইল</th>
@@ -88,7 +116,7 @@
                                         <td class="text-center"><?=$donor['name']?></td>
                                         <td class="text-center"><?=$donor['mobile']?></td>
                                         <td class="text-center"><?=$donor['email']?></td>
-                                        <td class="text-center"><?=$donor['district']?></td>
+                                        <td class="text-center"><?=\App\Controllers\Home::getDistrictByIdnTerm($donor['district'])?></td>
                                         <td class="text-center"><?=$donor['blood_group']?></td>
                                     </tr>
                                     <?php
@@ -104,7 +132,7 @@
                                         <td class="text-center"><?=$supporter['name']?></td>
                                         <td class="text-center"><?=$supporter['mobile']?></td>
                                         <td class="text-center"><?=$supporter['email']?></td>
-                                        <td class="text-center"><?=$supporter['district']?></td>
+                                        <td class="text-center"><?=\App\Controllers\Home::getDistrictByIdnTerm($supporter['district'])?></td>
                                         <td class="text-center"><?=$supporter['blood_group']?></td>
                                         </tr>
                                     <?php
@@ -128,7 +156,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="text-end">
+                <?=$pager->links()?>
+                <div class="text-left">
                     <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#alarmModal">জরুরী রক্ত প্রয়োজন?<br>একটি এলার্ম তৈরি করুন</button>
                 </div>
                 <?= validation_list_errors();?>
@@ -145,7 +174,7 @@
                     <div class="card-header"><i class="fa fa-bullhorn fa-2xs" aria-hidden="true"></i> জরুরী রক্ত প্রয়োজন</div>
                     <div class="card-body">
                         <p>রক্তের গ্রুপঃ <?=$alarm['blood_group']?></p>
-                        <p>জেলাঃ <?=$alarm['district']?></p>
+                        <p>জেলাঃ <?=\App\Controllers\Home::getDistrictByIdnTerm($alarm['district'])?></p>
                         <p>ঠিকানাঃ <?=$alarm['address']?></p>
                         <p>উদ্দেশ্যঃ <?=$alarm['reason']?></p>
                     </div>
@@ -201,74 +230,10 @@
                                 <label for="district" class="form-label text-danger">নিজ জেলা: (যেকোন একটি নির্বাচন করুন):</label>
                                 <select class="form-select" id="district" name="district" required>
                                     <option selected disabled value="">নির্বাচন করুন (আবশ্যক)</option>
-                                    <option>গাজীপুর</option>
-                                    <option>গোপালগঞ্জ</option>
-                                    <option>টাঙ্গাইল</option>
-                                    <option>ঢাকা</option>
-                                    <option>নরসিংদী</option>
-                                    <option>নারায়ণগঞ্জ</option>
-                                    <option>ফরিদপুর</option>
-                                    <option>মাদারীপুর</option>
-                                    <option>মানিকগঞ্জ</option>
-                                    <option>মুন্সিগঞ্জ</option>
-                                    <option>রাজবাড়ী</option>
-                                    <option>শরিয়তপুর</option>
-                                    <option>কিশোরগঞ্জ</option>
-                                    <option>কুমিল্লা</option>
-                                    <option>ব্রাক্ষনবাড়িয়া</option>
-                                    <option>চাঁদপুর</option>
-                                    <option>নোয়াখালী</option>
-                                    <option>লক্ষীপুর</option>
-                                    <option>ফেনী</option>
-                                    <option>খাগড়াছড়ি</option>
-                                    <option>রাঙ্গামাটি</option>
-                                    <option>বান্দরবন</option>
-                                    <option>চট্টগ্রাম</option>
-                                    <option>কক্সবাজার</option>
-                                    <option>চাঁপাইনবাবগঞ্জ</option>
-                                    <option>জয়পুরহাট</option>
-                                    <option>নওগাঁ</option>
-                                    <option>নাটোর</option>
-                                    <option>পাবনা</option>
-                                    <option>বগুড়া</option>
-                                    <option>রাজশাহী</option>
-                                    <option>সিরাজগঞ্জ</option>
-                                    <option>খুলনা</option>
-                                    <option>চুয়াডাঙ্গা</option>
-                                    <option>ঝিনাইদহ</option>
-                                    <option>নড়াইল</option>
-                                    <option>বাগেরহাট</option>
-                                    <option>সাতক্ষীরা</option>
-                                    <option>কুষ্টিয়া</option>
-                                    <option>মাগুরা</option>
-                                    <option>মেহেরপুর</option>
-                                    <option>যশোর</option>
-                                    <option>বরিশাল</option>
-                                    <option>পটুয়াখালী</option>
-                                    <option>ভোলা</option>
-                                    <option>পিরোজপুর</option>
-                                    <option>বরগুনা</option>
-                                    <option>ঝালকাঠি</option>
-                                    <option>সিলেট</option>
-                                    <option>মৌলভীবাজার</option>
-                                    <option>হবিগঞ্জ</option>
-                                    <option>সুনামগঞ্জ</option>
-                                    <option>কুড়িগ্রাম</option>
-                                    <option>গাইবান্ধা</option>
-                                    <option>ঠাকুরগাঁও</option>
-                                    <option>দিনাজপুর</option>
-                                    <option>নীলফামারী</option>
-                                    <option>পঞ্চগড়</option>
-                                    <option>রংপুর</option>
-                                    <option>লালমনিরহাট</option>
-                                    <option>ময়মংসিংহ</option>
-                                    <option>জামালপুর</option>
-                                    <option>নেত্রকোণা</option>
-                                    <option>শেরপুর</option>
+                                    <?php foreach($districts as $district) {?>
+                                        <option value="<?=$district['id']?>"><?=$district['name_bn']?></option>
+                                    <?php } ?>
                                 </select>
-                                <!-- <div class="invalid-feedback">
-                                    Please select a valid state.
-                                </div> -->
                             </div>
 
                             <div class="mb-3">
@@ -333,73 +298,12 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="district" class="form-label text-danger">জেলা: (যেকোন একটি নির্বাচন করুন):</label>
+                                <label for="district" class="form-label text-danger">জেলা: (যেখানে রক্ত প্রয়োজন):</label>
                                 <select class="form-select" id="district2" name="district2" required>
                                     <option selected disabled value="">নির্বাচন করুন (আবশ্যক)</option>
-                                    <option>গাজীপুর</option>
-                                    <option>গোপালগঞ্জ</option>
-                                    <option>টাঙ্গাইল</option>
-                                    <option>ঢাকা</option>
-                                    <option>নরসিংদী</option>
-                                    <option>নারায়ণগঞ্জ</option>
-                                    <option>ফরিদপুর</option>
-                                    <option>মাদারীপুর</option>
-                                    <option>মানিকগঞ্জ</option>
-                                    <option>মুন্সিগঞ্জ</option>
-                                    <option>রাজবাড়ী</option>
-                                    <option>শরিয়তপুর</option>
-                                    <option>কিশোরগঞ্জ</option>
-                                    <option>কুমিল্লা</option>
-                                    <option>ব্রাক্ষনবাড়িয়া</option>
-                                    <option>চাঁদপুর</option>
-                                    <option>নোয়াখালী</option>
-                                    <option>লক্ষীপুর</option>
-                                    <option>ফেনী</option>
-                                    <option>খাগড়াছড়ি</option>
-                                    <option>রাঙ্গামাটি</option>
-                                    <option>বান্দরবন</option>
-                                    <option>চট্টগ্রাম</option>
-                                    <option>কক্সবাজার</option>
-                                    <option>চাঁপাইনবাবগঞ্জ</option>
-                                    <option>জয়পুরহাট</option>
-                                    <option>নওগাঁ</option>
-                                    <option>নাটোর</option>
-                                    <option>পাবনা</option>
-                                    <option>বগুড়া</option>
-                                    <option>রাজশাহী</option>
-                                    <option>সিরাজগঞ্জ</option>
-                                    <option>খুলনা</option>
-                                    <option>চুয়াডাঙ্গা</option>
-                                    <option>ঝিনাইদহ</option>
-                                    <option>নড়াইল</option>
-                                    <option>বাগেরহাট</option>
-                                    <option>সাতক্ষীরা</option>
-                                    <option>কুষ্টিয়া</option>
-                                    <option>মাগুরা</option>
-                                    <option>মেহেরপুর</option>
-                                    <option>যশোর</option>
-                                    <option>বরিশাল</option>
-                                    <option>পটুয়াখালী</option>
-                                    <option>ভোলা</option>
-                                    <option>পিরোজপুর</option>
-                                    <option>বরগুনা</option>
-                                    <option>ঝালকাঠি</option>
-                                    <option>সিলেট</option>
-                                    <option>মৌলভীবাজার</option>
-                                    <option>হবিগঞ্জ</option>
-                                    <option>সুনামগঞ্জ</option>
-                                    <option>কুড়িগ্রাম</option>
-                                    <option>গাইবান্ধা</option>
-                                    <option>ঠাকুরগাঁও</option>
-                                    <option>দিনাজপুর</option>
-                                    <option>নীলফামারী</option>
-                                    <option>পঞ্চগড়</option>
-                                    <option>রংপুর</option>
-                                    <option>লালমনিরহাট</option>
-                                    <option>ময়মংসিংহ</option>
-                                    <option>জামালপুর</option>
-                                    <option>নেত্রকোণা</option>
-                                    <option>শেরপুর</option>
+                                    <?php foreach($districts as $district) {?>
+                                        <option value="<?=$district['id']?>"><?=$district['name_bn']?></option>
+                                    <?php } ?>
                                 </select>
                                 <!-- <div class="invalid-feedback">
                                     Please select a valid state.

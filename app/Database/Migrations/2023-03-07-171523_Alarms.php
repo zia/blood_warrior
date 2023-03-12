@@ -25,8 +25,9 @@ class Alarms extends Migration
                 'constraint' => '15',
             ],
             'district' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '20',
+                'type'       => 'INT',
+                'constraint' => '3',
+                'unsigned'   => true,
             ],
             'blood_group' => [
                 'type'       => 'VARCHAR',
@@ -44,6 +45,7 @@ class Alarms extends Migration
             'updated_at datetime default current_timestamp on update current_timestamp',
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('district', 'districts', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('alarms');
     }
 

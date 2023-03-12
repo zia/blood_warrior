@@ -14,7 +14,7 @@ class DonorsSeeder extends Seeder
                 'name'          => $this->getRandomString(4).' '.$this->getRandomString(4),
                 'mobile'        => $this->getRandomString(11),
                 'email'         => $this->getRandomString(20),
-                'district'      => $this->getRandomString(15),
+                'district'      => rand(1,64),
                 'blood_group'   => $this->getRandomString(3)
             ];
             $this->db->table('donors')->insert($data);

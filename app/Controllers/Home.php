@@ -5,12 +5,18 @@ helper('form');
 
 class Home extends BaseController
 {
+    /**
+     * Ind\
+     * \ex Method
+     */
     public function index($message = null)
     {
         $model = model(DonorsModel::class);
-        $data['supporters'] = $model->orderBy('created_at', 'desc')->findAll();
+        $data['supporters'] = $model->orderBy('created_at', 'desc')->paginate(10);
+        $data['pager'] = $model->pager;
         $data['message'] =  $message;
-        $data['alarms'] = $this->getAlarm();
+        $data['alarms'] = $this->getAlarms();
+        $data['districts'] = $this->getDistricts();
         return view('welcome_message', $data);
     }
 
@@ -33,11 +39,13 @@ class Home extends BaseController
                 $data['donors'] = $model->where('id', $this->request->getGet(['search']))
                                         ->orWhere('mobile', $this->request->getGet(['search']))
                                         ->orWhere('email', $this->request->getGet(['search']))
-                                        ->orWhere('district', $this->request->getGet(['search']))
+                                        ->orWhere('district', $this->getDistrictByIdnTerm(null, $this->request->getGet(['search'])))
                                         ->orWhere('blood_group', $this->request->getGet(['search']))
                                         ->orderBy('created_at', 'desc')
-                                        ->findAll();
-                $data['alarms'] = $this->getAlarm();
+                                        ->paginate(10);
+                $data['pager'] = $model->pager;
+                $data['alarms'] = $this->getAlarms();
+                $data['districts'] = $this->getDistricts();
                 return view('welcome_message', $data);
             }
 
@@ -88,10 +96,41 @@ class Home extends BaseController
         }
     }
 
-    private function getAlarm()
+    /**
+     * Get Alarms list
+     */
+    private function getAlarms()
     {
         $model = model(AlarmsModel::class);
         return $model->orderBy('created_at', 'desc')->findAll(5);
+    }
+
+    /**
+     * Get Districts list
+     */
+    private function getDistricts()
+    {
+        $model = model(DistrictsModel::class);
+        return $model->orderBy('id', 'asc')->findAll();
+    }
+
+    /**
+     * Get District by id & term
+     */
+    public static function getDistrictByIdnTerm($id = null, $term = null)
+    {
+        $model = model(DistrictsModel::class);
+        if($id !== null)
+            return $model->find($id)['name_bn'];
+        else if($term !== null) {
+            $data = $model->where('name_bn', $term)->orWhere('name_en', $term)->findAll();
+            if(!empty($data))
+                return $data[0]['id'];
+            else
+                return $model->find(4)['id']; // result showing for Dhaka, more improved logic may be applied.
+        }
+        else
+            return $model->find(4)['id']; // result showing for Dhaka, more improved logic may be applied.
     }
 
     /**
@@ -140,6 +179,9 @@ class Home extends BaseController
         }
     }
 
+    /**
+     * notify donors about alarm creation.
+     */
     private function notifyDonors($data)
     {
         $email = \Config\Services::email();
