@@ -12,10 +12,10 @@ class DonorsSeeder extends Seeder
         {
             $data = [
                 'name'          => $this->getRandomString(4).' '.$this->getRandomString(4),
-                'mobile'        => $this->getRandomString(11),
-                'email'         => $this->getRandomString(20),
+                'mobile'        => rand(10000000000, 11999999999),
+                'email'         => $this->getRandomString(9).'@gmail.com',
                 'district'      => rand(1,64),
-                'blood_group'   => $this->getRandomString(3)
+                'blood_group'   => $this->getBloodGroup()
             ];
             $this->db->table('donors')->insert($data);
         }
@@ -32,5 +32,11 @@ class DonorsSeeder extends Seeder
         }
 
         return $randomString;
+    }
+
+    public function getBloodGroup() {
+        $bg=array("A+","B+","AB+","O+","A-","B-","AB-","O-","N");
+        $random_keys=array_rand($bg,8);
+        return $bg[$random_keys[0]];
     }
 }
