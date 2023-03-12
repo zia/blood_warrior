@@ -175,10 +175,10 @@
                     <div class="card-body">
                         <p>রক্তের গ্রুপঃ <?=$alarm['blood_group']?></p>
                         <p>জেলাঃ <?=\App\Controllers\Home::getDistrictByIdnTerm($alarm['district'])?></p>
-                        <p>ঠিকানাঃ <?=$alarm['address']?></p>
-                        <p>উদ্দেশ্যঃ <?=$alarm['reason']?></p>
+                        <p>ঠিকানাঃ <?=character_limiter($alarm['address'],20)?></p>
+                        <p>উদ্দেশ্যঃ <?=character_limiter($alarm['reason'],10)?></p>
                     </div>
-                    <div class="card-footer"><a href="tel:<?=$alarm['mobile']?>" class="btn btn-outline-warning text-white"><i class="fa fa-phone" aria-hidden="true"></i> <?=$alarm['mobile']?></a></div>
+                    <div class="card-footer"><a href="tel:<?=$alarm['mobile']?>" class="btn btn-outline-warning text-white"><i class="fa fa-phone fa-2xs" aria-hidden="true"></i> <?=$alarm['mobile']?></a></div>
                 </div>
             </div>
             <?php } ?>

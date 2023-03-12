@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-helper('form');
+helper(['form', 'text']);
 
 class Home extends BaseController
 {
